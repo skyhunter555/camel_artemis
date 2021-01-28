@@ -7,17 +7,20 @@ Library name: camel-artemis
 По умолчанию, в JMeter создается 5 сообщений из 10 потоков.
 
 Для проведения тестирования необходимо сначала запустить ActiveMQ Artemis.
+
 Консоль: http://localhost:8161/console/
 Затем запустить сервис camel-artemis. 
 После этого открыть приложенную конфигурацию в JMeter и запутить выполнение.
 
 После обработки сообщений в логе выводиться информация:
+
 route1 - ******** ROUTING FROM INPUT QUEUE TO OUTPUT
 route2 - ******** PROCESS MESSAGE FROM OUTPUT QUEUE
 CamelConsumer - START CONSUME MESSAGE, docId: 1 docType: order
 CamelConsumer - FINISH CONSUME MESSAGE, docId: 1 docType: order. Total consumed: 50
 
 Ссылки на использованную документацию:
+
 https://activemq.apache.org/components/artemis/
 https://tomd.xyz/camel-activemq/
 https://www.javainuse.com/camel/camelException
