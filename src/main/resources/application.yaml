@@ -1,0 +1,17 @@
+logging:
+  config: classpath:log4j2.xml
+server:
+  application-name: camel-artemis-service
+  work-time: 100
+  activemq:
+    queues:
+      input-endpoint: "jmsComponent:queue:inputqueue"
+      output-order-endpoint: "jmsComponent:queue:orderoutputqueue"
+camel:
+  activemq:
+    brokerUrl: tcp://localhost:61616
+    user: user
+    password: user
+    concurrentConsumers: 10
+
+
