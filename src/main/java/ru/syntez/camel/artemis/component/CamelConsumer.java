@@ -2,6 +2,8 @@ package ru.syntez.camel.artemis.component;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import ru.syntez.camel.artemis.entities.RoutingDocument;
 
 /**
@@ -10,15 +12,13 @@ import ru.syntez.camel.artemis.entities.RoutingDocument;
  * @author Skyhunter
  * @date 28.01.2021
  */
+@Component
 public class CamelConsumer {
 
     private static Logger LOG = LogManager.getLogger(CamelConsumer.class);
 
-    private Integer delayMillis;
-    public CamelConsumer(Integer delayMillis) {
-        this.delayMillis = delayMillis;
-    }
-
+    @Value("${server.work-time}")
+    private Integer delayMillis = 100;
     private Integer consumedDocumentCount = 0;
 
     public void execute(RoutingDocument document) {

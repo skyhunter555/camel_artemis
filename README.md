@@ -5,10 +5,11 @@ Library name: camel-artemis
 В примере создается одна входящая очередь (inputqueue) и одна исходящая (outputorder).
 Для тестов используется JMeter. Необходимя конфигурация для JMeter выложена в соответсвующей папке: Artemis_Camel.jmx
 По умолчанию, в JMeter создается 5 сообщений из 10 потоков.
-В параметрах входящей очереди максимальное количество потоков ConcurrentConsumers = 10.
 
 Для проведения тестирования необходимо сначала запустить ActiveMQ Artemis.
-Затем запустить сервис camel-artemis. После этого открыть приложенную конфигурацию в JMeter и запутить выполнение.
+Консоль: http://localhost:8161/console/
+Затем запустить сервис camel-artemis. 
+После этого открыть приложенную конфигурацию в JMeter и запутить выполнение.
 
 После обработки сообщений в логе выводиться информация:
 route1 - ******** ROUTING FROM INPUT QUEUE TO OUTPUT
@@ -17,6 +18,9 @@ CamelConsumer - START CONSUME MESSAGE, docId: 1 docType: order
 CamelConsumer - FINISH CONSUME MESSAGE, docId: 1 docType: order. Total consumed: 50
 
 Ссылки на использованную документацию:
+https://activemq.apache.org/components/artemis/
+https://tomd.xyz/camel-activemq/
+https://www.javainuse.com/camel/camelException
 
 Зависимости:
 https://camel.apache.org/camel-spring-boot/latest/activemq-starter.html
@@ -34,7 +38,8 @@ https://jmeter.apache.org/usermanual/get-started.html
 Нет стандартной библиотеки camel-artemis-starter. 
 Например такая как org.apache.camel.springboot:camel-rabbitmq-starter.
 В spring есть библиотека spring-boot-starter-artemis, но это не camel, и там нет camel контекста для маршрутизации.
-Есть аналогия camel-jms-starter.
+Есть аналогия camel-jms-starter. Ее необходимо использовать вместе с библиотекой artemis-jms-client.
+Но есть ограничения по автоконфигурации. И для старта сервиса использовать зависимость spring-boot-starter-web. 
 
 ## Example
 java -jar camel-artemis-1.0.0.jar

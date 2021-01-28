@@ -1,8 +1,8 @@
 package ru.syntez.camel.artemis.test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+//import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
+//import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
