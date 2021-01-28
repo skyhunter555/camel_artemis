@@ -15,8 +15,11 @@ Library name: camel-artemis
 После обработки сообщений в логе выводиться информация:
 
 route1 - ******** ROUTING FROM INPUT QUEUE TO OUTPUT
+
 route2 - ******** PROCESS MESSAGE FROM OUTPUT QUEUE
+
 CamelConsumer - START CONSUME MESSAGE, docId: 1 docType: order
+
 CamelConsumer - FINISH CONSUME MESSAGE, docId: 1 docType: order. Total consumed: 50
 
 Ссылки на использованную документацию:
@@ -38,7 +41,9 @@ https://github.com/apache/activemq-artemis/tree/master/examples/perf/jmeter
 https://jmeter.apache.org/usermanual/get-started.html
 
 Трудности при реализации:
+
 Нет стандартной библиотеки camel-artemis-starter. 
+
 Например такая как org.apache.camel.springboot:camel-rabbitmq-starter.
 В spring есть библиотека spring-boot-starter-artemis, но это не camel, и там нет camel контекста для маршрутизации.
 Есть аналогия camel-jms-starter. Ее необходимо использовать вместе с библиотекой artemis-jms-client.
