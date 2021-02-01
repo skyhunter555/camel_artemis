@@ -54,16 +54,10 @@ public class JmsConfig {
 
     @Bean
     public ActiveMQConnectionFactory connectionFactory() {
-
-        RedeliveryPolicy redeliveryPolicy = new RedeliveryPolicy();
-        redeliveryPolicy.setMaximumRedeliveries(3); // will retry 3 times to dequeue rollbacked messages
-        redeliveryPolicy.setInitialRedeliveryDelay(5 *1000);  // will wait 5s to read that message
-
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
         connectionFactory.setBrokerURL(brokerConnector);
         connectionFactory.setUserName(brokerUser);
         connectionFactory.setPassword(brokerPass);
-        connectionFactory.setRedeliveryPolicy(redeliveryPolicy);
         connectionFactory.setNonBlockingRedelivery(true);
         return connectionFactory;
     }

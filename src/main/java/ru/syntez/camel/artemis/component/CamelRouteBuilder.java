@@ -1,15 +1,9 @@
 package ru.syntez.camel.artemis.component;
 
-import org.apache.camel.*;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.activemq.ActiveMQComponent;
-import org.apache.camel.component.bean.BeanEndpoint;
 import org.apache.camel.converter.jaxb.JaxbDataFormat;
-import org.apache.camel.support.DefaultEndpoint;
-import org.apache.camel.support.DefaultProducer;
 import ru.syntez.camel.artemis.entities.RoutingDocument;
 import ru.syntez.camel.artemis.exceptions.RouterException;
-
 import javax.xml.bind.JAXBContext;
 
 /**
@@ -36,7 +30,10 @@ public class CamelRouteBuilder extends RouteBuilder {
         JAXBContext context = JAXBContext.newInstance(RoutingDocument.class);
         xmlDataFormat.setContext(context);
 
-        onException(RouterException.class).process(new CamelErrorProcessor()).log("******** ERROR ON ROUTING ").handled(true);
+        onException(Exception.class).process(new CamelErrorProcessor()).log("******** ERROR ON ROUTING ")
+                .handled(true)
+                .redeliveryDelay(10000)
+                .maximumRedeliveries(5);
 
         from(queueInputEndpoint)
             .log("******** ROUTING FROM INPUT QUEUE TO OUTPUT")
@@ -46,10 +43,6 @@ public class CamelRouteBuilder extends RouteBuilder {
             .transacted()
             .doTry().unmarshal(xmlDataFormat)
             .log("******** PROCESS MESSAGE FROM OUTPUT QUEUE")
-            .doTry()
-                .bean("camelConsumer", "execute(${body})")
-            .doCatch(RouterException.class)
-                .rollback()
-            .end();
+            .bean("camelConsumer", "execute(${body})");
     }
 }

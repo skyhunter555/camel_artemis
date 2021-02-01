@@ -21,9 +21,9 @@ public class CamelErrorProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        RouterException cause = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, RouterException.class);
+        Exception cause = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
         if (cause != null) {
-            LOG.error("Error has occurred: ", cause);
+            LOG.error("******** UNKNOWN ERROR: ", cause);
             //TODO sending Error message to client
             Message msg = exchange.getIn().getBody(Message.class);
             try {
