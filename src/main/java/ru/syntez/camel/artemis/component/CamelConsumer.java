@@ -3,6 +3,7 @@ package ru.syntez.camel.artemis.component;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.syntez.camel.artemis.entities.RoutingDocument;
+import ru.syntez.camel.artemis.exceptions.RouterException;
 
 /**
  * Configuration custom CamelConsumer
@@ -24,6 +25,9 @@ public class CamelConsumer {
     public void execute(RoutingDocument document) {
 
         LOG.info("START CONSUME MESSAGE, docId: {} docType: {}", document.getDocId(), document.getDocType());
+        if (consumedDocumentCount > 10) {
+            throw new RouterException("ConsumedDocumentCount > 10. Rollback");
+        }
         try {
             Thread.sleep(delayMillis);
             consumedDocumentCount++;
