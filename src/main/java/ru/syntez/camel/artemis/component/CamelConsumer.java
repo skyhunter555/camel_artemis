@@ -25,10 +25,10 @@ public class CamelConsumer {
     public void execute(RoutingDocument document) {
 
         LOG.info("START CONSUME MESSAGE, docId: {} docType: {}", document.getDocId(), document.getDocType());
-        if (consumedDocumentCount >= 11) {
+        if (consumedDocumentCount >= 10) {
 
             //Сброс счетчика, для повторной отправки
-            if (consumedDocumentCount > 19) {
+            if (consumedDocumentCount >= 19) {
                 consumedDocumentCount = 0;
             }
 

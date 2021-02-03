@@ -61,7 +61,8 @@ public class JmsConfig {
     @Value("${camel.activemq.redeliveryCount}")
     private Integer redeliveryCount;
 
-
+    @Value("${camel.activemq.redeliveryDelayMs}")
+    private Integer redeliveryDelayMs;
 
     @Bean
     public ActiveMQConnectionFactory connectionFactory() {
@@ -95,7 +96,7 @@ public class JmsConfig {
         CamelContext camelContext = new DefaultCamelContext(registry);
         JmsConfiguration jmsConfiguration = new JmsConfiguration(connectionFactory());
         jmsConfiguration.setConcurrentConsumers(concurrentConsumers); //Пул потоков JMS слушателей для обслуживания входящих сообщений
-
+        jmsConfiguration.setTransacted(true);
         jmsConfiguration.setAcknowledgementMode(Session.CLIENT_ACKNOWLEDGE); //Подтверждение будет отправлено только тогда, когда код консюмера в явном виде вызовет метод Message.acknowledge ().
         jmsConfiguration.setCacheLevelName("CACHE_AUTO"); //Пример конфигураци кеша
 
@@ -103,11 +104,11 @@ public class JmsConfig {
         activeMQComponent.setConfiguration(jmsConfiguration);
         camelContext.addComponent("jmsComponent", activeMQComponent);
 
-        InputToOutputRouteBuilder inputToOutputRoute = new InputToOutputRouteBuilder(queueInputOutputEndpoint, queueOutputEndpoint, redeliveryCount);
-        FromOutputToBeanBuilder outputToBeanRoute = new FromOutputToBeanBuilder(queueInputOutputBeanEndpoint, queueOutputBeanEndpoint, redeliveryCount);
+        InputToOutputRouteBuilder inputToOutputRoute = new InputToOutputRouteBuilder(queueInputOutputEndpoint, queueOutputEndpoint, redeliveryCount, redeliveryDelayMs);
+        FromOutputToBeanBuilder outputToBeanRoute = new FromOutputToBeanBuilder(queueInputOutputBeanEndpoint, queueOutputBeanEndpoint, redeliveryCount, redeliveryDelayMs);
         try {
             camelContext.addRoutes(inputToOutputRoute);
-            camelContext.addRoutes(outputToBeanRoute);
+         //   camelContext.addRoutes(outputToBeanRoute);
             camelContext.start();
         } catch (Exception e) {
             e.printStackTrace();

@@ -3,6 +3,7 @@ package ru.syntez.camel.artemis.component;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.converter.jaxb.JaxbDataFormat;
 import ru.syntez.camel.artemis.entities.RoutingDocument;
+import ru.syntez.camel.artemis.exceptions.RouterException;
 
 import javax.xml.bind.JAXBContext;
 
@@ -20,11 +21,18 @@ public class InputToOutputRouteBuilder extends RouteBuilder {
     private final String queueInputEndpoint;
     private final String queueOutputEndpoint;
     private final Integer redeliveryCount;
+    private final Integer redeliveryDelayMs;
 
-    public InputToOutputRouteBuilder(String queueInputEndpoint, String queueOutputEndpoint, Integer redeliveryCount) {
+    public InputToOutputRouteBuilder(
+            String queueInputEndpoint,
+            String queueOutputEndpoint,
+            Integer redeliveryCount,
+            Integer redeliveryDelayMs
+    ) {
         this.queueInputEndpoint = queueInputEndpoint;
         this.queueOutputEndpoint = queueOutputEndpoint;
         this.redeliveryCount = redeliveryCount;
+        this.redeliveryDelayMs = redeliveryDelayMs;
     }
 
     private JaxbDataFormat xmlDataFormat = new JaxbDataFormat();
@@ -37,16 +45,19 @@ public class InputToOutputRouteBuilder extends RouteBuilder {
 
         onException(Exception.class).process(new CamelErrorProcessor()).log("******** ERROR ON ROUTING ")
                 .handled(true)
-                .redeliveryDelay(20000)
-                .maximumRedeliveries(redeliveryCount);
+                .redeliveryDelay(redeliveryDelayMs)
+                .maximumRedeliveries(redeliveryCount)
+                .rollback();
 
         from(queueInputEndpoint)
-            .log("******** ROUTING FROM INPUT QUEUE TO OUTPUT")
-            .transacted()
-            .doTry().unmarshal(xmlDataFormat)
-            .bean("camelConsumer", "execute(${body})")
-            .log("******** CONSUME MESSAGE AND SEND TO OUTPUT QUEUE")
-            .to(queueOutputEndpoint);
+                .log("******** ROUTING FROM INPUT QUEUE TO OUTPUT")
+                .transacted()
+                .doTry()
+                .unmarshal(xmlDataFormat)
+                .bean("camelConsumer", "execute(${body})")
+                .log("******** CONSUME MESSAGE AND SEND TO OUTPUT QUEUE")
+                .to(queueOutputEndpoint);
+
 
     }
 }

@@ -20,11 +20,18 @@ public class FromOutputToBeanBuilder extends RouteBuilder {
     private final String queueInputToOutputBeanEndpoint;
     private final String queueOutputBeanEndpoint;
     private final Integer redeliveryCount;
+    private final Integer redeliveryDelayMs;
 
-    public FromOutputToBeanBuilder(String queueInputToOutputBeanEndpoint, String queueOutputBeanEndpoint, Integer redeliveryCount) {
+    public FromOutputToBeanBuilder(
+            String queueInputToOutputBeanEndpoint,
+            String queueOutputBeanEndpoint,
+            Integer redeliveryCount,
+            Integer redeliveryDelayMs
+    ) {
         this.queueInputToOutputBeanEndpoint = queueInputToOutputBeanEndpoint;
         this.queueOutputBeanEndpoint = queueOutputBeanEndpoint;
         this.redeliveryCount = redeliveryCount;
+        this.redeliveryDelayMs = redeliveryDelayMs;
     }
 
     private JaxbDataFormat xmlDataFormat = new JaxbDataFormat();
@@ -37,8 +44,8 @@ public class FromOutputToBeanBuilder extends RouteBuilder {
 
         onException(Exception.class).process(new CamelErrorProcessor()).log("******** ERROR ON ROUTING ")
                 .handled(true)
-                .redeliveryDelay(10000)
-                .maximumRedeliveries(5);
+                .redeliveryDelay(redeliveryDelayMs)
+                .maximumRedeliveries(redeliveryCount);
 
         from(queueInputToOutputBeanEndpoint)
             .log("******** ROUTING FROM INPUT QUEUE TO OUTPUT")
