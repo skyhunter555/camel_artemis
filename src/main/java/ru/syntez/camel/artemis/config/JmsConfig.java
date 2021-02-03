@@ -97,6 +97,7 @@ public class JmsConfig {
         jmsConfiguration.setConcurrentConsumers(concurrentConsumers); //Пул потоков JMS слушателей для обслуживания входящих сообщений
 
         jmsConfiguration.setAcknowledgementMode(Session.CLIENT_ACKNOWLEDGE); //Подтверждение будет отправлено только тогда, когда код консюмера в явном виде вызовет метод Message.acknowledge ().
+        jmsConfiguration.setCacheLevelName("CACHE_AUTO"); //Пример конфигураци кеша
 
         ActiveMQComponent activeMQComponent = ActiveMQComponent.activeMQComponent();
         activeMQComponent.setConfiguration(jmsConfiguration);
