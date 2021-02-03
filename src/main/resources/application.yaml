@@ -5,13 +5,17 @@ server:
   work-time: 100
   activemq:
     queues:
-      input-endpoint: "jmsComponent:queue:inputqueue"
-      output-order-endpoint: "jmsComponent:queue:orderoutputqueue"
+      input-output-endpoint:      "jmsComponent:queue:inputToOutputQueue"
+      output-endpoint:            "jmsComponent:queue:outputQueue"
+      input-output-bean-endpoint: "jmsComponent:queue:inputToOutputBeanQueue"
+      output-bean-endpoint:       "jmsComponent:queue:outputToBeanQueue"
 camel:
   activemq:
     brokerUrl: tcp://localhost:61616
     user: user
     password: user
     concurrentConsumers: 10
+    redeliveryCount: 5
+    redeliveryDelayMs: 20000
 
 

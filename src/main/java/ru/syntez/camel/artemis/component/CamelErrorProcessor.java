@@ -22,7 +22,12 @@ public class CamelErrorProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         Exception cause = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
-        if (cause != null) {
+        if (cause == null) {
+            return;
+        }
+        if (cause instanceof RouterException) {
+            LOG.error("******** SOME TEST EXCEPTION FOR TEST TRANSACTION: ");
+        } else {
             LOG.error("******** UNKNOWN ERROR: ", cause);
             //TODO sending Error message to client
             Message msg = exchange.getIn().getBody(Message.class);

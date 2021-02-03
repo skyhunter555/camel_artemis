@@ -1,7 +1,6 @@
 package ru.syntez.camel.artemis.config;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.activemq.RedeliveryPolicy;
 import org.apache.camel.CamelContext;
 import org.apache.camel.component.activemq.ActiveMQComponent;
 import org.apache.camel.component.jms.JmsConfiguration;
@@ -13,7 +12,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.connection.JmsTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import ru.syntez.camel.artemis.component.CamelConsumer;
-import ru.syntez.camel.artemis.component.CamelRouteBuilder;
+import ru.syntez.camel.artemis.component.FromOutputToBeanBuilder;
+import ru.syntez.camel.artemis.component.InputToOutputRouteBuilder;
 
 import javax.jms.Session;
 import java.util.HashMap;
@@ -43,14 +43,25 @@ public class JmsConfig {
     @Value("${camel.activemq.concurrentConsumers}")
     private Integer concurrentConsumers = 10;
 
-    @Value("${server.activemq.queues.input-endpoint}")
-    private String queueInputEndpoint = "inputqueue";
+    @Value("${server.activemq.queues.input-output-endpoint}")
+    private String queueInputOutputEndpoint = "inputToOutputQueue";
 
-    @Value("${server.activemq.queues.output-order-endpoint}")
-    private String queueOutputOrderEndpoint = "outputorder";
+    @Value("${server.activemq.queues.output-endpoint}")
+    private String queueOutputEndpoint = "outputQueue";
+
+    @Value("${server.activemq.queues.input-output-bean-endpoint}")
+    private String queueInputOutputBeanEndpoint = "inputToOutputBeanQueue";
+
+    @Value("${server.activemq.queues.output-bean-endpoint}")
+    private String queueOutputBeanEndpoint = "outputBeanQueue";
 
     @Value("${server.work-time}")
     private Integer delayMillis;
+
+    @Value("${camel.activemq.redeliveryCount}")
+    private Integer redeliveryCount;
+
+
 
     @Bean
     public ActiveMQConnectionFactory connectionFactory() {
@@ -91,9 +102,11 @@ public class JmsConfig {
         activeMQComponent.setConfiguration(jmsConfiguration);
         camelContext.addComponent("jmsComponent", activeMQComponent);
 
-        CamelRouteBuilder routeBuilder = new CamelRouteBuilder(queueInputEndpoint, queueOutputOrderEndpoint);
+        InputToOutputRouteBuilder inputToOutputRoute = new InputToOutputRouteBuilder(queueInputOutputEndpoint, queueOutputEndpoint, redeliveryCount);
+        FromOutputToBeanBuilder outputToBeanRoute = new FromOutputToBeanBuilder(queueInputOutputBeanEndpoint, queueOutputBeanEndpoint, redeliveryCount);
         try {
-            camelContext.addRoutes(routeBuilder);
+            camelContext.addRoutes(inputToOutputRoute);
+            camelContext.addRoutes(outputToBeanRoute);
             camelContext.start();
         } catch (Exception e) {
             e.printStackTrace();
