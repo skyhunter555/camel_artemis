@@ -9,6 +9,7 @@ import org.apache.camel.support.SimpleRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.jms.connection.JmsTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import ru.syntez.camel.artemis.component.CamelConsumer;
@@ -65,13 +66,16 @@ public class JmsConfig {
     private Integer redeliveryDelayMs;
 
     @Bean
-    public ActiveMQConnectionFactory connectionFactory() {
-        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
-        connectionFactory.setBrokerURL(brokerConnector);
-        connectionFactory.setUserName(brokerUser);
-        connectionFactory.setPassword(brokerPass);
-        connectionFactory.setNonBlockingRedelivery(true);
-        return connectionFactory;
+    public CachingConnectionFactory connectionFactory() {
+        ActiveMQConnectionFactory artemisConnectionFactory = new ActiveMQConnectionFactory();
+        artemisConnectionFactory.setBrokerURL(brokerConnector);
+        artemisConnectionFactory.setUserName(brokerUser);
+        artemisConnectionFactory.setPassword(brokerPass);
+        artemisConnectionFactory.setNonBlockingRedelivery(true);
+        artemisConnectionFactory.setMaxThreadPoolSize(concurrentConsumers); //Пул потоков слушателей соединений
+        CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory(artemisConnectionFactory);
+        cachingConnectionFactory.setSessionCacheSize(20);
+        return cachingConnectionFactory;
     }
 
     @Bean

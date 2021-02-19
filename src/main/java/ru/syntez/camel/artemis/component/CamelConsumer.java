@@ -25,21 +25,19 @@ public class CamelConsumer {
     public void execute(RoutingDocument document) {
 
         LOG.info("START CONSUME MESSAGE, docId: {} docType: {}", document.getDocId(), document.getDocType());
-        if (consumedDocumentCount >= 10) {
-
-            //Сброс счетчика, для повторной отправки
-            if (consumedDocumentCount >= 19) {
-                consumedDocumentCount = 0;
-            }
-
-            throw new RouterException("ConsumedDocumentCount > 10. Send to redelivery");
-        }
-        try {
-            Thread.sleep(delayMillis);
-            consumedDocumentCount++;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        //if (consumedDocumentCount >= 10) {
+        //    //Сброс счетчика, для повторной отправки
+        //    if (consumedDocumentCount >= 19) {
+        //        consumedDocumentCount = 0;
+        //    }
+        //    throw new RouterException("ConsumedDocumentCount > 10. Send to redelivery");
+        //}
+        //try {
+        //    Thread.sleep(delayMillis); //имитация обработки
+        //} catch (InterruptedException e) {
+        //    e.printStackTrace();
+        //}
+        consumedDocumentCount++;
         LOG.info("FINISH CONSUME MESSAGE, docId: {} docType: {}. Total consumed: {}", document.getDocId(), document.getDocType(), consumedDocumentCount);
     }
 }

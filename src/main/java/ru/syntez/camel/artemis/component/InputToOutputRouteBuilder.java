@@ -50,13 +50,13 @@ public class InputToOutputRouteBuilder extends RouteBuilder {
                 .rollback();
 
         from(queueInputEndpoint)
-                .log("******** ROUTING FROM INPUT QUEUE TO OUTPUT")
+                //.log("******** ROUTING FROM INPUT QUEUE TO OUTPUT")
                 .transacted()
                 .doTry()
                 .unmarshal(xmlDataFormat)
-                .bean("camelConsumer", "execute(${body})")
-                .log("******** CONSUME MESSAGE AND SEND TO OUTPUT QUEUE")
-                .to(queueOutputEndpoint);
+                .bean("camelConsumer", "execute(${body})");
+                //.log("******** CONSUME MESSAGE AND SEND TO OUTPUT QUEUE")
+               // .to(queueOutputEndpoint);
 
 
     }

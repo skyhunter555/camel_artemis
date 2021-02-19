@@ -14,8 +14,8 @@ camel:
     brokerUrl: tcp://localhost:61616
     user: user
     password: user
-    concurrentConsumers: 10
+    concurrentConsumers: 500
     redeliveryCount: 5
-    redeliveryDelayMs: 20000
+    redeliveryDelayMs: 1000
 
 
