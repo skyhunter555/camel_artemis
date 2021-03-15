@@ -1,4 +1,3 @@
-set PATH=%PATH%;C:\Program Files\OpenSSL-Win64\bin
 set PATH=%PATH%;C:\Program Files\Java\jdk1.8.0_241\bin
 rem:#Create keystore for broker
 keytool -genkey -alias broker -keystore broker_ks.jks -storepass user555 -keypass user555 -dname "CN=ArtemisBroker, OU=Artemis, O=AMQ, L=AMQ, S=AMQ, C=RU" -keyalg RSA -ext san=ip:127.0.0.1
