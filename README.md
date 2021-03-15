@@ -2,13 +2,15 @@
 Library name: camel-artemis
 
   Для примера работы с очередью по протоколу AMQP была использована библиотеке apache camel и брокер сообщений ActiveMQ Artemis.  
-В примере создается одна входящая очередь (inputqueue) и одна исходящая (outputorder).
-Для тестов используется JMeter. Необходимя конфигурация для JMeter выложена в соответсвующей папке: Artemis_Camel.jmx
-По умолчанию, в JMeter создается 5 сообщений из 10 потоков.
-В параметрах входящей очереди максимальное количество потоков ConcurrentConsumers = 10.
+В примере создается одна входящая очередь inputToOutputQueue.</br>
 
-Для проведения тестирования необходимо сначала запустить ActiveMQ Artemis.
-Затем запустить сервис camel-artemis. После этого открыть приложенную конфигурацию в JMeter и запутить выполнение.
+Для работы в безопасном режиме с шифрованием SSL, были созданы самоподписанные сертификаты и настроена конфигурация</br>
+в брокере и клиенте. Так же добавлен сертификат и настройки для использования web-консоли через SSL.</br>
+Настройка конфигурации брокера находится в папке artemis-tls-config: broker.xml.</br>
+Для подключения режима ssl необходимо скопировать сертификаты из security в указанную в конфиге папку.</br>  
+
+Для генерации самоподписанных сертификатов необходимо запустить</br>
+security\artemis_create_server1_create_ssl.bat
 
 После обработки сообщений в логе выводиться информация:
 
@@ -22,24 +24,17 @@ CamelConsumer - FINISH CONSUME MESSAGE, docId: 1 docType: order. Total consumed:
 
 Ссылки на использованную документацию:
 
-Зависимости:
+Зависимости:</br>
 https://camel.apache.org/camel-spring-boot/latest/activemq-starter.html
 
-Запуск Artemis
+Запуск Artemis</br>
 https://activemq.apache.org/components/artemis/documentation/latest/using-server.html
 
-JMeter:
-Установка плагина Artemis в Jmeter:
-https://github.com/apache/activemq-artemis/tree/master/examples/perf/jmeter
-Запуск:
+JMeter:</br>
+Установка плагина Artemis в Jmeter:</br>
+https://github.com/apache/activemq-artemis/tree/master/examples/perf/jmeter</br>
+Запуск:</br>
 https://jmeter.apache.org/usermanual/get-started.html
-
-Трудности при реализации:
-
-Нет стандартной библиотеки camel-artemis-starter. 
-Например такая как org.apache.camel.springboot:camel-rabbitmq-starter.
-В spring есть библиотека spring-boot-starter-artemis, но это не camel, и там нет camel контекста для маршрутизации.
-Есть аналогия camel-jms-starter.
 
 ## Example
 java -jar camel-artemis-1.0.0.jar

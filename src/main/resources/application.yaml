@@ -9,9 +9,16 @@ server:
       output-endpoint:            "jmsComponent:queue:outputQueue"
       input-output-bean-endpoint: "jmsComponent:queue:inputToOutputBeanQueue"
       output-bean-endpoint:       "jmsComponent:queue:outputToBeanQueue"
+  ssl:
+    client-store-password: user555
+    client-consumer-trusted-store-path: "C:/Users/skyhunter/client_consumer_ts.p12"
+    client-consumer-key-store-path: "C:/Users/skyhunter/client_consumer_ks.p12"
+    client-sender-trusted-store-path: "C:/Users/skyhunter/client_sender_ts.p12"
+    client-sender-key-store-path: "C:/Users/skyhunter/client_sender_ks.p12"
 camel:
   activemq:
-    brokerUrl: tcp://localhost:61616
+    #brokerUrl: ssl://localhost:61617
+    brokerUrl: ssl://127.0.0.1:61618
     user: user
     password: user
     concurrentConsumers: 500

@@ -50,7 +50,7 @@ public class InputToOutputRouteBuilder extends RouteBuilder {
                 .rollback();
 
         from(queueInputEndpoint)
-                //.log("******** ROUTING FROM INPUT QUEUE TO OUTPUT")
+                .log("******** ROUTING FROM INPUT QUEUE TO OUTPUT")
                 .transacted()
                 .doTry()
                 .unmarshal(xmlDataFormat)

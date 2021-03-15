@@ -5,6 +5,8 @@ import org.apache.logging.log4j.Logger;
 import ru.syntez.camel.artemis.entities.RoutingDocument;
 import ru.syntez.camel.artemis.exceptions.RouterException;
 
+import java.util.Date;
+
 /**
  * Configuration custom CamelConsumer
  *
@@ -21,10 +23,11 @@ public class CamelConsumer {
     }
 
     private Integer consumedDocumentCount = 0;
+    private Date startTime = new Date();
 
     public void execute(RoutingDocument document) {
 
-        LOG.info("START CONSUME MESSAGE, docId: {} docType: {}", document.getDocId(), document.getDocType());
+       //LOG.info("START CONSUME MESSAGE, docId: {} docType: {}", document.getDocId(), document.getDocType());
         //if (consumedDocumentCount >= 10) {
         //    //Сброс счетчика, для повторной отправки
         //    if (consumedDocumentCount >= 19) {
@@ -37,7 +40,9 @@ public class CamelConsumer {
         //} catch (InterruptedException e) {
         //    e.printStackTrace();
         //}
+        Date totalTime = new Date();
+        long seconds =  (totalTime.getTime() - startTime.getTime()) / 1000;
         consumedDocumentCount++;
-        LOG.info("FINISH CONSUME MESSAGE, docId: {} docType: {}. Total consumed: {}", document.getDocId(), document.getDocType(), consumedDocumentCount);
+        LOG.info("FINISH CONSUME MESSAGE, docId: {} docType: {}. Total consumed: {} seconds {}", document.getDocId(), document.getDocType(), consumedDocumentCount, seconds);
     }
 }
